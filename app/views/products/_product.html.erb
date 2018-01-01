@@ -7,5 +7,8 @@
 
 <h3><%= link_to product.title, product_path(product) %></h3>
 
-<p>£10</p>
+<p>
+<%= number_to_currentcy product.price_in_dollars %>
+
+</p>
 </div>

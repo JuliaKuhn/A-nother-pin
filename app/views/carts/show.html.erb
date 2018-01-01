@@ -15,19 +15,39 @@
 <% @current_cart.order_items.each do |item| %>
 
       <tr>
-          <td><%= item.product.title %></td>
-          <td><%= item.product.price %></td>
-          <td><%= item.quantity %></td>
+          <td>
+              <%= image_tag item.product.image_1.thumb, width: "50 %>"
+              <%= item.product.title %>
+          </td>
+
+          <td><%= number_to_currentcy item.product.price_in_dollars %></td>
+          <td>
+
+
+            <%= f.input :quantity, label: false %>
+            <%= f.button :submit, "Udate quantity" %>
+      <% end %>
+          </td>
           <td>
             <%= link_to "Remove", product_order_item_path(item.product, item), method: :delete %>
           </td>
       </tr>
+
+
+
 
   <% end %>
 
 
   </tbody>
 </table>
+
+
+
+<p>
+  <%= link_to "Continue to checkout", new_order_path %>
+
+
 
 <% else %>
 <p class="empty">There are noe items in your cart</p>
