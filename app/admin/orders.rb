@@ -4,7 +4,7 @@ ActiveAdmin.register Order do
   #
   permit_params :first_name, :last_name, :email, :country, :address_1,
                 :address_2, :city, :postal_code,
-                order_items_attributes: %i[id product_id quantity]
+                order_items_attributes: [:id, :product_id, :quantity]
   index do
     selectable_column
     id_column
@@ -17,21 +17,23 @@ ActiveAdmin.register Order do
   end
 
   form do |f|
-    f.input :first_name
-    f.input :last_name
-    f.input :emal
-  end
-  f.inputs 'Address' do
-    f.input :address_1
-    f.input :address_2
-    f.input :city
-    f.input :postal_code
-    f.input :country
-  end
-  f.has_many :order.items, heading: 'Items' do |itemf|
-    itemf.input :product
-    itemf.input :quantity
-  end
+    f.inputs do
+      f.input :first_name
+      f.input :last_name
+      f.input :email
+    end
+    f.inputs 'Address' do
+      f.input :address_1
+      f.input :address_2
+      f.input :city
+      f.input :postal_code
+      f.input :country
+    end
+    f.has_many :order_items, heading: 'Items' do |itemf|
+      itemf.input :product
+      itemf.input :quantity
+    end
 
-  f.actions
+    f.actions
+  end
 end
