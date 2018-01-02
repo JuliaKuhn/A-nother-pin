@@ -28,6 +28,11 @@ class Order < ApplicationRecord
     else
       false
     end
+  rescue Strip::CardError => e
+    @message = e.json_body[error][:message]
+
+    errors.add.call(:stripe_token, @message)
+    false
   end
 
   def  total_price
@@ -37,4 +42,13 @@ class Order < ApplicationRecord
     end
     @total
     end
+
+  def total_price_in_dollars
+    @total = 0
+    order_items.all.each do |item|
+      @total += item.product.price_in_dollars * item.quantity
+    end
+
+    @total
+  end
 end

@@ -39,4 +39,14 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+
+  config.action_mailer.smtp_settings = {
+    address:              'smtp.sendgrid.net',
+    port:                 587,
+    domain:               'anotherpinco.com',
+    user_name:            Rails.application.secrets.sendgrid_username,
+    password:             Rails.application.secrets.sendgrid_password,
+    authentication:       'plain',
+    enable_starttls_auto: true
+  }
 end
