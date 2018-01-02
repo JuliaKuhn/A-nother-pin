@@ -15,4 +15,26 @@ class Order < ApplicationRecord
       order_items.new(product: item.product, quantity: item.quantity)
     end
   end
+
+  def save_and_charge
+    # check our data is valid
+    # if it is, charge in stripe
+    # if it isn't, returne false
+    # charge in stripe and save if all good
+    if valid?
+      Stripe::Charge.create(amount: total_price, currency: 'usd',
+                            source: stripe_token, description: 'Order for ' + email)
+      save
+    else
+      false
+    end
+  end
+
+  def  total_price
+    @total = 0
+    order_items.each do |item|
+      @total += item.product.price * item.quantity
+    end
+    @total
+    end
 end

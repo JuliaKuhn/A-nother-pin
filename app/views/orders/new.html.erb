@@ -1,6 +1,6 @@
 <h1>Checkout</h1>
 
-Total items of items: <%= @order.order_items.size %>
+Total number of items: <%= @order.order_items.size %>
 
 <%= simple_form_for @order do |f| %>
 <%= f.input :first_name %>
@@ -14,6 +14,36 @@ Total items of items: <%= @order.order_items.size %>
 <%= f.input :city %>
 <%= f.input :postal_code %>
 
-<%= f.button :submit %>
+<div id="card-errors"></div>
+
+<div id="card"></div>
+
+<%= f.button :submit, "Submit order" %>
 
 <% end %>
+
+<script>
+  var stripe = Stripe("<%= Rails.application.secrets.stripe_public_key %>")
+  var elements = stripe.elements()
+
+   var card = elements.create("card")
+
+   card.mount("#card")
+
+   $("form.new_order").on("submit", function (ev) {
+     ev.preventDefault()
+
+     stripe.createToken(card).then(function (result) {
+       if(result.error) {
+         $("#card-errors").html(result.error.message)
+
+       } else {
+         $("form.new_order").append("<input type=hidden name='order[stripe_token]' value=" + result.token.id +">")
+         $("form.new.order").get(0).submit()
+                }
+
+              })
+
+            })
+
+</script>
