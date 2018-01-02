@@ -1,5 +1,7 @@
 <h1>Checkout</h1>
 
+Total items of items: <%= @order.order_items.size %>
+
 <%= simple_form_for @order do |f| %>
 <%= f.input :first_name %>
 <%= f.input :last_name %>
